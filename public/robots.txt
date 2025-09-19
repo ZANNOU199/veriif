@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /_next/
+Disallow: /api/
+Disallow: /app/
+Disallow: /lib/
+Disallow: /components/
+Disallow: /hooks/
+Disallow: /scripts/
+Disallow: /styles/
+Disallow: /tsconfig.json
+Disallow: /package.json
+Disallow: /pnpm-lock.yaml
+Disallow: /postcss.config.mjs
+Disallow: /next.config.mjs
+Disallow: /README.md

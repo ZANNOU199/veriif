@@ -1,0 +1,22 @@
+{
+  "name": "RechargeSecure",
+  "short_name": "RechargeSecure",
+  "description": "Service professionnel et sécurisé pour la validation et le remboursement de tickets de recharge.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/placeholder-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/placeholder-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

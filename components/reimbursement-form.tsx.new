@@ -1,0 +1,296 @@
+"use client"
+
+import React, { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
+import { toast } from "@/components/ui/use-toast"
+
+type TicketType = 
+  | "transcash" 
+  | "pcs" 
+  | "neosurf" 
+  | "google_play" 
+  | "apple_store" 
+  | "steam" 
+  | "amazon"
+  | "credit_card"
+  | "debit_card"
+  | "new_ticket"
+
+const ticketTypes: { value: TicketType; label: string }[] = [
+  { value: "transcash", label: "Transcash" },
+  { value: "pcs", label: "PCS" },
+  { value: "neosurf", label: "Neosurf" },
+  { value: "google_play", label: "Google Play" },
+  { value: "apple_store", label: "Apple Store" },
+  { value: "steam", label: "Steam" },
+  { value: "amazon", label: "Amazon" },
+  { value: "credit_card", label: "Carte de crédit" },
+  { value: "debit_card", label: "Carte bancaire" },
+  { value: "new_ticket", label: "Nouveau ticket de recharge" },
+];
+
+const ReimbursementForm = () => {
+  const [formData, setFormData] = useState({
+    ticket_type: "transcash" as TicketType,
+    ticket_code: "",
+    ticket_amount: "",
+    user_email: "",
+    user_phone: "",
+    user_name: "",
+    reimbursement_method: "credit_card" as const,
+    reimbursement_reason: "unused" as const,
+    reimbursement_details: "",
+    bank_iban: "",
+    paypal_email: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    try {
+      // Here you would typically make an API call
+      // const response = await fetch('/api/submit-reimbursement', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(formData)
+      // });
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setSuccess(true);
+      toast({
+        title: "Demande envoyée avec succès!",
+        description: "Vous recevrez un email de confirmation."
+      });
+      
+      // Reset form
+      setFormData({
+        ticket_type: "transcash",
+        ticket_code: "",
+        ticket_amount: "",
+        user_email: "",
+        user_phone: "",
+        user_name: "",
+        reimbursement_method: "credit_card",
+        reimbursement_reason: "unused",
+        reimbursement_details: "",
+        bank_iban: "",
+        paypal_email: "",
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'envoi de votre demande.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <Card className="max-w-2xl mx-auto mt-8">
+        <CardHeader>
+          <CardTitle>Demande envoyée avec succès !</CardTitle>
+          <CardDescription>
+            Nous avons bien reçu votre demande de remboursement. Vous recevrez un email de confirmation sous peu.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="max-w-2xl mx-auto mt-8">
+      <CardHeader>
+        <CardTitle>Demande de remboursement</CardTitle>
+        <CardDescription>
+          Remplissez ce formulaire pour demander un remboursement
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Informations sur le ticket</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="ticket_type">Type de ticket *</Label>
+                <Select
+                  value={formData.ticket_type}
+                  onValueChange={(value) => handleSelectChange("ticket_type", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner un type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ticketTypes.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ticket_code">Code du ticket *</Label>
+                <Input
+                  id="ticket_code"
+                  name="ticket_code"
+                  value={formData.ticket_code}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="ticket_amount">Montant *</Label>
+                <Input
+                  id="ticket_amount"
+                  name="ticket_amount"
+                  type="number"
+                  value={formData.ticket_amount}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Informations personnelles</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="user_name">Nom complet *</Label>
+                <Input
+                  id="user_name"
+                  name="user_name"
+                  value={formData.user_name}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="user_email">Email *</Label>
+                <Input
+                  id="user_email"
+                  name="user_email"
+                  type="email"
+                  value={formData.user_email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="user_phone">Téléphone</Label>
+                <Input
+                  id="user_phone"
+                  name="user_phone"
+                  type="tel"
+                  value={formData.user_phone}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Méthode de remboursement</h3>
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label>Méthode de remboursement *</Label>
+                <Select
+                  value={formData.reimbursement_method}
+                  onValueChange={(value) => handleSelectChange("reimbursement_method", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner une méthode" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="credit_card">Carte de crédit</SelectItem>
+                    <SelectItem value="bank_transfer">Virement bancaire</SelectItem>
+                    <SelectItem value="paypal">PayPal</SelectItem>
+                    <SelectItem value="new_ticket">Nouveau ticket</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {formData.reimbursement_method === 'bank_transfer' && (
+                <div className="space-y-2">
+                  <Label htmlFor="bank_iban">IBAN *</Label>
+                  <Input
+                    id="bank_iban"
+                    name="bank_iban"
+                    value={formData.bank_iban}
+                    onChange={handleChange}
+                    placeholder="FR76 XXXX XXXX XXXX XXXX XXXX XXX"
+                    required
+                  />
+                </div>
+              )}
+
+              {formData.reimbursement_method === 'paypal' && (
+                <div className="space-y-2">
+                  <Label htmlFor="paypal_email">Email PayPal *</Label>
+                  <Input
+                    id="paypal_email"
+                    name="paypal_email"
+                    type="email"
+                    value={formData.paypal_email}
+                    onChange={handleChange}
+                    placeholder="votre@email.com"
+                    required
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="reimbursement_details">Détails supplémentaires</Label>
+            <Textarea
+              id="reimbursement_details"
+              name="reimbursement_details"
+              value={formData.reimbursement_details}
+              onChange={handleChange}
+              rows={4}
+              placeholder="Ajoutez des détails supplémentaires si nécessaire..."
+            />
+          </div>
+
+          <div className="flex justify-end">
+            <Button type="submit" disabled={loading}>
+              {loading ? 'Envoi en cours...' : 'Soumettre la demande'}
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ReimbursementForm;
