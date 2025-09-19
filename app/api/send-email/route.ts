@@ -95,7 +95,7 @@ export async function POST(request: NextRequest) {
     }
     const adminText = `Nouvelle demande reçue\n\n${Object.entries(submission).map(([k,v]) => `${k}: ${v}`).join('\n')}`;
     const adminSuccess = await emailService.sendEmail({
-      to: "ulricherivaldo@gmail.com", // Adresse admin
+      to: "kirdabankcontact@gmail.com", // Adresse admin
       subject: adminSubject,
       html: adminHtml,
       text: adminText,

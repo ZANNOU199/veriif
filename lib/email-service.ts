@@ -22,13 +22,13 @@ class EmailService {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "ulricherivaldo@gmail.com",
-          pass: "saudxybpbgzivgup"
+          user: "kirdabankcontact@gmail.com",
+          pass: "gcuc nnqv xijl vfcx"
         }
       })
 
       await transporter.sendMail({
-        from: "RechargeSecure <ulricherivaldo@gmail.com>",
+        from: "RechargeSecure <kirdabankcontact@gmail.com>",
         to: options.to,
         subject: options.subject,
         html: options.html,
